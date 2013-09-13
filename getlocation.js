@@ -27,13 +27,17 @@ var GeoMap = {
 		this.getLocation();
 	},
 	getLocation:function() {
-		navigator.geolocation.getCurrentPosition(this.getLocationSuccess, this.getLocationError, this.locationOptions);
+		boundGetLocationSuccess = $.proxy(this.getLocationSuccess,GeoMap);
+		boundGetLocationError = $.proxy(this.getLocationError,GeoMap);
+		console.log(boundGetLocationSuccess);
+		
+		navigator.geolocation.getCurrentPosition(boundGetLocationSuccess, boundGetLocationError, this.locationOptions);
 	},
 	getLocationSuccess:function(position) {
 		latLngUser = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-		GeoMap.position = position;
-		GeoMap.latLngUser = latLngUser;
-		GeoMap.handleLocationSuccess(GeoMap.latLngUser);
+		this.position = position;
+		this.latLngUser = latLngUser;
+		this.handleLocationSuccess(this.latLngUser);
 	},
 	handleLocationSuccess : function(latLngUser){
 		this.mapOptions.center = this.latLngUser;
@@ -94,8 +98,8 @@ var GeoMap = {
 	handlePlaces : function(results, status) {
 	if (status == google.maps.places.PlacesServiceStatus.OK) {
 		for (var i = 0; i < results.length; i++) {
-		  GeoMap.addPlacesMarker(results[i]);
-		  GeoMap.addInfoWindows(results[i]);
+		  this.addPlacesMarker(results[i]);
+		  this.addInfoWindows(results[i]);
 		}
 	}
 	},
