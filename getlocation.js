@@ -29,8 +29,6 @@ var GeoMap = {
 	getLocation:function() {
 		boundGetLocationSuccess = $.proxy(this.getLocationSuccess,GeoMap);
 		boundGetLocationError = $.proxy(this.getLocationError,GeoMap);
-		console.log(boundGetLocationSuccess);
-		
 		navigator.geolocation.getCurrentPosition(boundGetLocationSuccess, boundGetLocationError, this.locationOptions);
 	},
 	getLocationSuccess:function(position) {
@@ -92,14 +90,15 @@ var GeoMap = {
 		});
 	},
 	requestPlaces : function() {
+		boundHandlePlaces = $.proxy(this.handlePlaces,GeoMap);
 		var service = new google.maps.places.PlacesService(this.map);
-		service.nearbySearch(this.placeRequestOptions, this.handlePlaces);
+		service.nearbySearch(this.placeRequestOptions, boundHandlePlaces);
 	},
 	handlePlaces : function(results, status) {
 	if (status == google.maps.places.PlacesServiceStatus.OK) {
 		for (var i = 0; i < results.length; i++) {
-		  this.addPlacesMarker(results[i]);
-		  this.addInfoWindows(results[i]);
+		this.addPlacesMarker(results[i]);
+		this.addInfoWindows(results[i]);
 		}
 	}
 	},
